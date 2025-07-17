@@ -212,6 +212,12 @@
 
         <div class="login-body">
             <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+                {% if error %}
+                <div style="color: var(--danger); text-align: center; margin-bottom: 15px; font-weight: bold;">
+                    {{ error }}
+                </div>
+                {% endif %}
+
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
                     <div style="position: relative;">

@@ -83,6 +83,7 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None  # متغير لإرسال رسالة الخطأ
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -91,20 +92,19 @@ def login():
         if user and check_password_hash(user['password'], password):
             user_obj = User(user)
             login_user(user_obj)
-            next_page = request.args.get('next')
-
-            
             if user_obj.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             else:
                 return redirect(url_for('home'))
         else:
-            flash('Invalid email or password', 'danger')
-    return render_template('login.html')
+            error = 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
+    return render_template('login.html', error=error)
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    error = None
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
@@ -112,25 +112,23 @@ def register():
         confirm_password = request.form.get('confirm_password')
         
         if password != confirm_password:
-            flash('Passwords do not match', 'danger')
-            return redirect(url_for('register'))
-        
-        if db.users.find_one({'email': email}):
-            flash('Email already exists', 'danger')
-            return redirect(url_for('register'))
-        
-        hashed_password = generate_password_hash(password)
-        user_data = {
-            'username': username,
-            'email': email,
-            'password': hashed_password,
-            'role': 'user',
-            'created_at': datetime.utcnow()
-        }
-        db.users.insert_one(user_data)
-        flash('Registration successful. Please login.', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html')
+            error = 'كلمة المرور غير متطابقة'
+        elif db.users.find_one({'email': email}):
+            error = 'البريد الإلكتروني موجود بالفعل'
+        else:
+            hashed_password = generate_password_hash(password)
+            user_data = {
+                'username': username,
+                'email': email,
+                'password': hashed_password,
+                'role': 'user',
+                'created_at': datetime.utcnow()
+            }
+            db.users.insert_one(user_data)
+            return redirect(url_for('login'))
+    
+    return render_template('register.html', error=error)
+
 
 @app.route('/logout')
 @login_required

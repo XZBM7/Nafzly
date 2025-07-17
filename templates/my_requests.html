@@ -50,11 +50,7 @@
                                             عرض
                                         </button>
 
-                                        {% if task.status == 'rejected' %}
-                                        <button class="btn btn-sm btn-danger" onclick="deleteRequest('{{ task._id }}')">
-                                            حذف
-                                        </button>
-                                        {% elif task.status in ['pending', 'negotiation'] and task.admin_response %}
+                                        {% if task.status in ['rejected', 'pending', 'negotiation'] %}
                                         <button class="btn btn-sm btn-danger" onclick="deleteRequest('{{ task._id }}')">
                                             حذف
                                         </button>
@@ -63,7 +59,6 @@
                                 </td>
                             </tr>
 
-                            <!-- Task Modal -->
                             <div class="modal fade" id="taskModal{{ task._id }}" tabindex="-1">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -98,9 +93,8 @@
                                                 <span class="text-muted">لا يوجد ملف</span>
                                                 {% endif %}
 
-
                                                 {% if task.status == 'negotiation' %}
-                                                <div class="alert alert-info">
+                                                <div class="alert alert-info mt-3">
                                                     <h6>تفاوض على السعر:</h6>
                                                     <p>السعر المقترح من الأدمن: {{ task.admin_response.price }} EGP</p>
                                                     <p>سعرك المضاد: {{ task.user_counter_price }} EGP</p>
@@ -129,8 +123,7 @@
                                                 {% endif %}
                                             </div>
                                             <div class="modal-footer">
-                                                {% if task.admin_response and task.status in ['pending', 'negotiation']
-                                                %}
+                                                {% if task.admin_response and task.status in ['pending', 'negotiation'] %}
                                                 <form method="POST"
                                                     action="{{ url_for('update_request', task_id=task._id) }}"
                                                     class="d-inline">
@@ -150,7 +143,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
