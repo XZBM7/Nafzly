@@ -25,20 +25,25 @@ login_manager.login_view = 'login'
 
 
 
+from bson.errors import InvalidId
+
 class User(UserMixin):
     def __init__(self, user_data):
-        self.id = str(user_data['_id'])
-        self.username = user_data['username']
-        self.email = user_data['email']
+        self.id = str(user_data.get('_id'))
+        self.username = user_data.get('username', '')
+        self.email = user_data.get('email', '')
         self.role = user_data.get('role', 'user')
         self.profile_pic = user_data.get('profile_pic', '')
 
 @login_manager.user_loader
 def load_user(user_id):
-    user_data = db.users.find_one({'_id': ObjectId(user_id)})
-    if not user_data:
-        return None
-    return User(user_data)
+    try:
+        user_data = db.users.find_one({'_id': ObjectId(user_id)})
+        if user_data:
+            return User(user_data)
+    except (InvalidId, TypeError):
+        pass
+    return None
 
 import os
 from flask import send_from_directory
@@ -133,10 +138,16 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+from bson.errors import InvalidId
+
 @app.route('/home')
 @login_required
 def home():
-    user_id = ObjectId(current_user.id)
+    try:
+        user_id = ObjectId(current_user.id)
+    except (InvalidId, TypeError):
+        flash("خطأ في تعريف المستخدم", "danger")
+        return redirect(url_for('logout'))
 
     stats = {
         'total_requests': db.tasks.count_documents({'user_id': user_id}),
@@ -151,6 +162,7 @@ def home():
     )
 
     return render_template('home.html', stats=stats, recent_tasks=recent_tasks)
+
 
 def allowed_compressed_file(filename):
     allowed_extensions = {'zip', 'rar', '7z'}
