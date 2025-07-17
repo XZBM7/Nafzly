@@ -4,3 +4,10 @@ pymongo
 python-dotenv
 gunicorn
 werkzeug
+Flask
+Flask-Login
+pymongo
+python-dotenv
+gunicorn
+werkzeug
+
