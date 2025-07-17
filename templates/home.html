@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">لوحة التحكم</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">إجمالي الطلبات</h5>
+                        <h2 class="mb-0">{{ stats.total_requests }}</h2>
+                    </div>
+                    <i class="fas fa-tasks fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">الطلبات المقبولة</h5>
+                        <h2 class="mb-0">{{ stats.accepted_requests }}</h2>
+                    </div>
+                    <i class="fas fa-check-circle fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">الطلبات المرفوضة</h5>
+                        <h2 class="mb-0">{{ stats.rejected_requests }}</h2>
+                    </div>
+                    <i class="fas fa-times-circle fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">الطلبات المعلقة</h5>
+                        <h2 class="mb-0">{{ stats.pending_requests }}</h2>
+                    </div>
+                    <i class="fas fa-clock fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">قيد التفاوض</h5>
+                        <h2 class="mb-0">{{ stats.under_negotiation }}</h2>
+                    </div>
+                    <i class="fas fa-handshake fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">آخر الطلبات</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>العنوان</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in recent_tasks %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ task.title }}</td>
+                                <td>
+                                    {% if task.status == 'accepted' %}
+                                    <span class="badge bg-success">مقبول</span>
+                                    {% elif task.status == 'rejected' %}
+                                    <span class="badge bg-danger">مرفوض</span>
+                                    {% elif task.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">معلق</span>
+                                    {% elif task.status == 'negotiation' %}
+                                    <span class="badge bg-info">تفاوض</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ task.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>
+                                    <a href="{{ url_for('my_requests') }}" class="btn btn-sm btn-primary">عرض</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

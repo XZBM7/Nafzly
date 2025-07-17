@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+
+{% block title %}تعديل منشور{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">تعديل المنشور</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">عنوان المنشور</label>
+            <input type="text" name="title" class="form-control" value="{{ post.title }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">محتوى المنشور</label>
+            <textarea name="content" rows="5" class="form-control" required>{{ post.content }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">الملف PDF (اختياري)</label>
+            <input type="file" name="pdf" class="form-control" accept="application/pdf">
+            {% if post.pdf %}
+            <div class="mt-2">
+                <small class="text-muted">الملف الحالي:</small>
+                <a href="{{ url_for('static', filename=post.pdf) }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">عرض الملف</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save me-2"></i> حفظ التعديلات
+        </button>
+        <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary">إلغاء</a>
+    </form>
+</div>
+{% endblock %}

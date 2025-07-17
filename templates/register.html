@@ -1,0 +1,429 @@
+{% block content %}
+<style>
+    :root {
+        --primary: #4361ee;
+        --primary-dark: #3a56d4;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --danger: #f72585;
+        --success: #4cc9f0;
+        --white: #ffffff;
+        --light: #f8f9fa;
+        --gray: #6c757d;
+        --dark: #212529;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Tajawal', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        color: var(--dark);
+        line-height: 1.6;
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0.5rem;
+    }
+
+    @media (min-width: 576px) {
+        .register-container {
+            max-width: 540px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .register-container {
+            max-width: 720px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .register-container {
+            max-width: 960px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .register-container {
+            max-width: 1140px;
+        }
+    }
+
+    .register-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .register-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: var(--white);
+        padding: 1.25rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-header h4 {
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.5rem;
+        position: relative;
+    }
+
+    .card-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+        transform: rotate(30deg);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        background-color: var(--white);
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+        position: relative;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 2px solid #e0e3e9;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: var(--light);
+        font-family: 'Tajawal', sans-serif;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        background-color: var(--white);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        padding: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        margin-top: 0.5rem;
+        width: 100%;
+        color: white;
+        cursor: pointer;
+        font-family: 'Tajawal', sans-serif;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .text-center {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .text-center p {
+        margin-bottom: 0;
+        font-size: 0.95rem;
+    }
+
+    .text-center a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+    .text-center a:hover {
+        color: var(--secondary);
+        text-decoration: underline;
+    }
+
+    .error-message {
+        color: var(--danger);
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+        display: none;
+    }
+
+    .is-invalid {
+        border-color: var(--danger) !important;
+    }
+
+    .is-valid {
+        border-color: var(--success) !important;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 2.5rem;
+        color: var(--gray);
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 480px) {
+        .card-header h4 {
+            font-size: 1.3rem;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .form-control {
+            padding: 0.65rem 1rem 0.65rem 2.3rem;
+            font-size: 0.95rem;
+        }
+
+        .input-icon {
+            top: 2.3rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            padding: 0.65rem;
+            font-size: 0.95rem;
+        }
+    }
+
+    @media (max-width: 768px) and (orientation: landscape) {
+        .register-container {
+            padding: 0.5rem;
+        }
+
+        .register-card {
+            max-width: 450px;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .register-card {
+            max-width: 600px;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-card">
+        <div class="card-header">
+            <h4>تسجيل مستخدم جديد</h4>
+        </div>
+        <div class="card-body">
+            <form id="registerForm" method="POST" action="{{ url_for('register') }}">
+                <div class="form-group">
+                    <label for="username" class="form-label">اسم المستخدم</label>
+                    <div style="position: relative;">
+                        <input type="text" class="form-control" id="username" name="username" required minlength="3">
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="usernameError">يجب أن يكون اسم المستخدم 3 أحرف على الأقل</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">البريد الإلكتروني</label>
+                    <div style="position: relative;">
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="emailError">الرجاء إدخال بريد إلكتروني صحيح</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">كلمة المرور</label>
+                    <div style="position: relative;">
+                        <input type="password" class="form-control" id="password" name="password" required
+                            minlength="6">
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="passwordError">يجب أن تكون كلمة المرور 6 أحرف على الأقل</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
+                    <div style="position: relative;">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                            required>
+                        <div class="input-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">كلمة المرور غير متطابقة</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">تسجيل</button>
+            </form>
+
+            <div class="text-center">
+                <p>لديك حساب بالفعل؟ <a href="{{ url_for('login') }}">سجل الدخول</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registerForm');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+
+        const usernameError = document.getElementById('usernameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+        usernameInput.addEventListener('input', validateUsername);
+        emailInput.addEventListener('input', validateEmail);
+        passwordInput.addEventListener('input', function () {
+            validatePassword();
+            validateConfirmPassword();
+        });
+        confirmPasswordInput.addEventListener('input', validateConfirmPassword);
+
+        form.addEventListener('submit', function (e) {
+            const isUsernameValid = validateUsername();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+
+            if (!isUsernameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
+                e.preventDefault();
+            }
+        });
+
+        function validateUsername() {
+            const username = usernameInput.value.trim();
+
+            if (!username) {
+                showError(usernameInput, usernameError, 'اسم المستخدم مطلوب');
+                return false;
+            } else if (username.length < 3) {
+                showError(usernameInput, usernameError, 'يجب أن يكون اسم المستخدم 3 أحرف على الأقل');
+                return false;
+            } else {
+                showSuccess(usernameInput, usernameError);
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!email) {
+                showError(emailInput, emailError, 'البريد الإلكتروني مطلوب');
+                return false;
+            } else if (!emailRegex.test(email)) {
+                showError(emailInput, emailError, 'الرجاء إدخال بريد إلكتروني صحيح');
+                return false;
+            } else {
+                showSuccess(emailInput, emailError);
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value.trim();
+
+            if (!password) {
+                showError(passwordInput, passwordError, 'كلمة المرور مطلوبة');
+                return false;
+            } else if (password.length < 6) {
+                showError(passwordInput, passwordError, 'يجب أن تكون كلمة المرور 6 أحرف على الأقل');
+                return false;
+            } else {
+                showSuccess(passwordInput, passwordError);
+                return true;
+            }
+        }
+
+        function validateConfirmPassword() {
+            const password = passwordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+
+            if (!confirmPassword) {
+                showError(confirmPasswordInput, confirmPasswordError, 'تأكيد كلمة المرور مطلوب');
+                return false;
+            } else if (password !== confirmPassword) {
+                showError(confirmPasswordInput, confirmPasswordError, 'كلمة المرور غير متطابقة');
+                return false;
+            } else {
+                showSuccess(confirmPasswordInput, confirmPasswordError);
+                return true;
+            }
+        }
+
+        function showError(input, errorElement, message) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function showSuccess(input, errorElement) {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+            errorElement.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

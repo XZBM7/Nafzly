@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}الملف الشخصي{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0"><i class="fas fa-user-circle me-2"></i> الملف الشخصي</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">الاسم</label>
+                            <input type="text" class="form-control" name="name" id="name" value="{{ user.username }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">كلمة المرور الجديدة (اختياري)</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="اتركه فارغًا إن لم ترغب بالتغيير">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
+                            <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">حفظ التعديلات</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

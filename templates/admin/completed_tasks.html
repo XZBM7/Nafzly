@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+
+{% block title %}رفع ملفات المهام المقبولة{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">المهام المقبولة</h2>
+
+    <div class="card shadow">
+        <div class="card-body">
+
+            {% if tasks %}
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>المستخدم</th>
+                        <th>العنوان</th>
+                        <th>الوصف</th>
+                        <th>الموعد النهائي</th>
+                        <th>رفع المهمة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.user.username }}</td>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.deadline }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('upload_final_file', task_id=task._id) }}"
+                                enctype="multipart/form-data">
+                                <div class="input-group">
+                                    <input type="file" name="task_file" accept=".zip,.pdf" class="form-control"
+                                        required>
+                                    <button class="btn btn-success btn-sm" type="submit">رفع</button>
+                                </div>
+                            </form>
+
+                            {% if task.final_file %}
+                            <small class="text-success d-block mt-2">
+                                <i class="fas fa-check-circle"></i> تم رفع الملف
+
+                                <a href="{{ url_for('static', filename=task.final_file.replace('static/', '').replace('\\', '/')) }}"
+                                    class="btn btn-sm btn-outline-primary ms-2" download>
+                                    <i class="fas fa-download"></i> تحميل
+                                </a>
+                            </small>
+
+                            <form method="POST" action="{{ url_for('delete_final_file', task_id=task._id) }}"
+                                onsubmit="return confirm('هل أنت متأكد من حذف الملف؟');" class="d-inline-block mt-1">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i> حذف الملف
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-info text-center">لا توجد مهام مقبولة حالياً.</div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

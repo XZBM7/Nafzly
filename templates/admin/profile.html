@@ -1,0 +1,34 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}تعديل الملف الشخصي{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">الملف الشخصي</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="email" class="form-label">البريد الإلكتروني</label>
+            <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+        </div>
+
+        <div class="mb-3">
+    <label for="name" class="form-label">الاسم</label>
+    <input type="text" class="form-control" name="name" id="name" value="{{ user.username }}" required>
+</div>
+
+
+        <div class="mb-3">
+            <label for="password" class="form-label">كلمة المرور الجديدة (اختياري)</label>
+            <input type="password" class="form-control" name="password" id="password">
+        </div>
+
+        <div class="mb-3">
+            <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
+            <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+        </div>
+
+        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+    </form>
+</div>
+{% endblock %}

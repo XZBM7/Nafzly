@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">طلباتي</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>العنوان</th>
+                                <th>الوصف</th>
+                                <th>السعر</th>
+                                <th>الموعد النهائي</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.description[:50] }}{% if task.description|length > 50 %}...{% endif %}</td>
+                                <td>{{ task.price }} EGP</td>
+                                <td>{{ task.deadline }}</td>
+                                <td>
+                                    {% if task.status == 'accepted' %}
+                                    <span class="badge bg-success">مقبول</span>
+                                    {% elif task.status == 'rejected' %}
+                                    <span class="badge bg-danger">مرفوض</span>
+                                    {% elif task.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">معلق</span>
+                                    {% elif task.status == 'negotiation' %}
+                                    <span class="badge bg-info">تفاوض</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#taskModal{{ task._id }}">
+                                            عرض
+                                        </button>
+
+                                        {% if task.status == 'rejected' %}
+                                        <button class="btn btn-sm btn-danger" onclick="deleteRequest('{{ task._id }}')">
+                                            حذف
+                                        </button>
+                                        {% elif task.status in ['pending', 'negotiation'] and task.admin_response %}
+                                        <button class="btn btn-sm btn-danger" onclick="deleteRequest('{{ task._id }}')">
+                                            حذف
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Task Modal -->
+                            <div class="modal fade" id="taskModal{{ task._id }}" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary text-white">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <h6>الوصف:</h6>
+                                                <p>{{ task.description }}</p>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <h6>السعر المطلوب:</h6>
+                                                    <p>{{ task.price }} EGP</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <h6>الموعد النهائي:</h6>
+                                                    <p>{{ task.deadline }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <h6>الملف المرفوع:</h6>
+                                                {% if task.file_path %}
+                                                <a href="{{ url_for('static', filename=task.file_path) }}"
+                                                    class="btn btn-sm btn-outline-primary" download>
+                                                    <i class="fas fa-download"></i> تحميل الملف
+                                                </a>
+                                                {% else %}
+                                                <span class="text-muted">لا يوجد ملف</span>
+                                                {% endif %}
+
+
+                                                {% if task.status == 'negotiation' %}
+                                                <div class="alert alert-info">
+                                                    <h6>تفاوض على السعر:</h6>
+                                                    <p>السعر المقترح من الأدمن: {{ task.admin_response.price }} EGP</p>
+                                                    <p>سعرك المضاد: {{ task.user_counter_price }} EGP</p>
+
+                                                    <form id="negotiationForm{{ task._id }}" method="POST"
+                                                        action="{{ url_for('update_request', task_id=task._id) }}">
+                                                        <div class="input-group mb-3">
+                                                            <input type="number" step="0.01" class="form-control"
+                                                                name="new_price" placeholder="السعر الجديد" required>
+                                                            <button type="submit" class="btn btn-primary" name="action"
+                                                                value="negotiate">إرسال</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                {% endif %}
+
+                                                {% if task.admin_response %}
+                                                <div
+                                                    class="alert {% if task.status == 'accepted' %}alert-success{% elif task.status == 'rejected' %}alert-danger{% else %}alert-secondary{% endif %}">
+                                                    <h6>رد الأدمن:</h6>
+                                                    <p>{{ task.admin_response.message }}</p>
+                                                    {% if task.admin_response.price %}
+                                                    <p>السعر المقترح: {{ task.admin_response.price }} EGP</p>
+                                                    {% endif %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer">
+                                                {% if task.admin_response and task.status in ['pending', 'negotiation']
+                                                %}
+                                                <form method="POST"
+                                                    action="{{ url_for('update_request', task_id=task._id) }}"
+                                                    class="d-inline">
+                                                    <button type="submit" class="btn btn-success" name="action"
+                                                        value="accept">قبول</button>
+                                                </form>
+                                                <form method="POST"
+                                                    action="{{ url_for('update_request', task_id=task._id) }}"
+                                                    class="d-inline">
+                                                    <button type="submit" class="btn btn-danger" name="action"
+                                                        value="reject">رفض</button>
+                                                </form>
+                                                {% endif %}
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">إغلاق</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function deleteRequest(taskId) {
+        if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+            window.location.href = `/delete_request/${taskId}`;
+        }
+    }
+</script>
+{% endblock %}

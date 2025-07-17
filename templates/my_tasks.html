@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}مهامي{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>مهامي</h3>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>العنوان</th>
+                <th>الحالة</th>
+                <th>الموعد النهائي</th>
+                <th>الملف النهائي</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>
+                    {% if task.status == 'accepted' %}
+                    <span class="badge bg-success">مقبول</span>
+                    {% elif task.status == 'rejected' %}
+                    <span class="badge bg-danger">مرفوض</span>
+                    {% elif task.status == 'pending' %}
+                    <span class="badge bg-warning text-dark">معلق</span>
+                    {% elif task.status == 'negotiation' %}
+                    <span class="badge bg-info">تفاوض</span>
+                    {% endif %}
+                </td>
+                <td>{{ task.deadline }}</td>
+                <td>
+                    {% if task.final_file %}
+                    <a href="{{ url_for('static', filename=task.final_file) }}" class="btn btn-sm btn-outline-primary"
+                        download>
+                        <i class="fas fa-download"></i> تحميل الملف
+                    </a>
+                    {% else %}
+                    <span class="text-muted">لم يتم الرفع بعد</span>
+                    {% endif %}
+                </td>
+
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

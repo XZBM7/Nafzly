@@ -1,0 +1,291 @@
+{% extends "admin/base.html" %}
+{% block title %}الطلبات الواردة{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h2 class="page-title">📥 الطلبات الواردة</h2>
+
+    <div class="table-container">
+        <div class="table-header">الطلبات المعلقة</div>
+
+        <div class="table-wrapper">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>المستخدم</th>
+                        <th>العنوان</th>
+                        <th>الوصف</th>
+                        <th>السعر</th>
+                        <th>الموعد النهائي</th>
+                        <th>رقم التواصل</th>
+                        <th>الملف</th>
+                        <th>تاريخ الإنشاء</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>{{ req.user.username }}</td>
+                        <td>{{ req.title }}</td>
+                        <td>{{ req.description | truncate(40) }}</td>
+                        <td><span class="badge-success">{{ req.price }} ج.م</span></td>
+                        <td>{{ req.deadline }}</td>
+                        <td>{{ req.contact.phone_number if req.contact else 'غير متوفر' }}</td>
+                        <td>
+                            {% if req.file_path %}
+                            <a class="btn-download" href="{{ url_for('static', filename=req.file_path) }}"
+                                target="_blank">
+                                عرض الملف
+                            </a>
+                            {% else %}
+                            <span class="text-muted">لا يوجد</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <form method="POST" action="{{ url_for('admin_quick_action', task_id=req._id) }}">
+                                    <input type="hidden" name="action" value="accept">
+                                    <button type="submit" class="btn btn-accept"><i class="fas fa-check-circle"></i>
+                                        قبول</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin_quick_action', task_id=req._id) }}">
+                                    <input type="hidden" name="action" value="reject">
+                                    <button type="submit" class="btn btn-reject"><i class="fas fa-times-circle"></i>
+                                        رفض</button>
+                                </form>
+                                <button type="button" class="btn btn-negotiate"
+                                    onclick="showNegotiationPopup('{{ req._id }}')">
+                                    <i class="fas fa-comments"></i> تفاوض
+                                </button>
+                                <form method="POST" action="{{ url_for('admin_delete_request', task_id=req._id) }}">
+                                    <button type="submit" class="btn btn-delete"
+                                        onclick="return confirm('هل أنت متأكد من حذف هذا الطلب؟');">
+                                        <i class="fas fa-trash"></i> حذف
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- نافذة التفاوض -->
+                    <div class="popup-overlay" id="popup-{{ req._id }}">
+                        <div class="popup-content">
+                            <h4><i class="fas fa-handshake"></i> تفاوض على: {{ req.title }}</h4>
+                            <form method="POST" action="{{ url_for('admin_quick_action', task_id=req._id) }}">
+                                <input type="hidden" name="action" value="negotiate">
+                                <label>السعر المقترح:</label>
+                                <input type="number" name="negotiation_price" step="0.01" required>
+                                <label>ملاحظات:</label>
+                                <textarea name="description" rows="4" required></textarea>
+                                <div class="popup-actions">
+                                    <button type="submit" class="btn btn-send"><i class="fas fa-paper-plane"></i>
+                                        إرسال</button>
+                                    <button type="button" class="btn btn-cancel"
+                                        onclick="closeNegotiationPopup('{{ req._id }}')">
+                                        <i class="fas fa-times"></i> إلغاء
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    body {
+        font-family: "Cairo", sans-serif;
+        background-color: #f5f6fa;
+    }
+
+    .page-container {
+        padding: 30px;
+    }
+
+    .page-title {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #007bff;
+        text-align: center;
+    }
+
+    .table-container {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+    }
+
+    .table-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 12px 8px;
+        border: 1px solid #eee;
+        font-size: 14px;
+    }
+
+    .custom-table th {
+        background-color: #f8f9fa;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        padding: 5px 10px;
+        color: white;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+    .btn-download {
+        color: #007bff;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .text-muted {
+        color: #999;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 13px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn i {
+        margin-left: 5px;
+    }
+
+    .btn-accept {
+        background-color: #28a745;
+    }
+
+    .btn-reject {
+        background-color: #dc3545;
+    }
+
+    .btn-negotiate {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .btn-delete {
+        background-color: #6c757d;
+    }
+
+    .btn:hover {
+        opacity: 0.85;
+    }
+
+    .popup-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .popup-content {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        width: 95%;
+        max-width: 500px;
+    }
+
+    .popup-content h4 {
+        margin-bottom: 20px;
+    }
+
+    .popup-content label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .popup-content input,
+    .popup-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .popup-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn-send {
+        background-color: #28a745;
+    }
+
+    .btn-cancel {
+        background-color: #dc3545;
+    }
+
+    @media (max-width: 768px) {
+
+        .custom-table th,
+        .custom-table td {
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        .popup-content {
+            padding: 20px;
+        }
+
+        .popup-actions {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+
+<script>
+    function showNegotiationPopup(id) {
+        document.getElementById(`popup-${id}`).style.display = 'flex';
+    }
+    function closeNegotiationPopup(id) {
+        document.getElementById(`popup-${id}`).style.display = 'none';
+    }
+</script>
+{% endblock %}
