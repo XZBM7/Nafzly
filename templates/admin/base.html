@@ -641,8 +641,18 @@
                     إنشاء منشور جديد
                 </a>
             </div>
+
+             <div class="menu-item">
+                <a href="{{ url_for('logout') }}" class="menu-link">
+                    <i class="fas fa-sign-out-alt"></i>
+خروج
+                </a>
+            </div>
+
         </div>
     </div>
+
+
 
     <div class="main-content">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -659,34 +669,7 @@
         {% block content %}{% endblock %}
     </div>
 
-    <nav class="mobile-nav">
-        <ul class="navbar-nav mobile-nav-menu">
-            <li class="mobile-nav-item">
-                <a href="{{ url_for('admin_dashboard') }}" class="mobile-nav-link">
-                    <i class="fas fa-home"></i>
-                    الرئيسية
-                </a>
-            </li>
-            <li class="mobile-nav-item">
-                <a href="{{ url_for('admin_requests') }}" class="mobile-nav-link">
-                    <i class="fas fa-inbox"></i>
-                    الطلبات
-                </a>
-            </li>
-            <li class="mobile-nav-item">
-                <a href="{{ url_for('admin_operations') }}" class="mobile-nav-link">
-                    <i class="fas fa-tasks"></i>
-                    العمليات
-                </a>
-            </li>
-            <li class="mobile-nav-item">
-                <a href="{{ url_for('logout') }}" class="mobile-nav-link">
-                    <i class="fas fa-sign-out-alt"></i>
-                    خروج
-                </a>
-            </li>
-        </ul>
-    </nav>
+    
 
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function () {
