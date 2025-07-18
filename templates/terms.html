@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}شروط الخدمة{% endblock %}
+
+{% block content %}
+<style>
+    .terms-section {
+        background-color: #f4f6fb;
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .terms-content {
+        background-color: #fff;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .terms-section h2 {
+        color: #3f37c9;
+        font-weight: bold;
+    }
+
+    .terms-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .terms-section ul li {
+        padding-left: 1.5rem;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .terms-section ul li::before {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 0;
+        color: #4895ef;
+    }
+
+    @media (max-width: 768px) {
+        .terms-content {
+            padding: 1.5rem;
+        }
+
+        .terms-section h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<section class="terms-section py-5">
+    <div class="container">
+        <div class="terms-content">
+            <h2 class="text-center mb-4"><i class="fas fa-file-contract me-2 text-primary"></i>شروط الخدمة</h2>
+
+            <p class="mb-4 text-muted text-center">
+                باستخدامك هذا الموقع، فإنك توافق على شروط الاستخدام التالية لضمان تجربة آمنة ومنظمة للجميع.
+            </p>
+
+            <ul>
+                <li>يُمنع استخدام الموقع في أي نشاط غير قانوني أو مسيء.</li>
+                <li>يجب الالتزام بالمصداقية والشفافية في الطلبات والمعاملات.</li>
+                <li>نحتفظ بحق تعديل الشروط في أي وقت دون إشعار مسبق.</li>
+                <li>أي خرق لهذه الشروط قد يؤدي إلى تعليق أو إنهاء الحساب.</li>
+            </ul>
+
+            <p class="mt-4">
+                لمزيد من المعلومات، يمكنك مراجعة <a href="{{ url_for('privacy') }}" class="text-decoration-underline text-primary">سياسة الخصوصية</a>.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

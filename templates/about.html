@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% block title %}عن نظام نفّذلي{% endblock %}
+
+{% block content %}
+
+<style>
+  /* General Styles */
+.about-system {
+    font-family: 'Tajawal', sans-serif;
+    direction: rtl;
+}
+
+/* Hero Section */
+.about-hero {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.about-hero h1 {
+    font-size: 2.8rem;
+    line-height: 1.2;
+}
+
+/* Sections Common Styles */
+.section-title {
+    font-size: 2rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #0d6efd;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+}
+
+/* Features Section */
+.feature-card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.feature-text {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+/* System Info Section */
+.info-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.step {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-left: 15px;
+    flex-shrink: 0;
+}
+
+.step-content h5 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Developer Section */
+.dev-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.dev-skills .badge {
+    font-size: 0.9rem;
+    padding: 0.5em 0.8em;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .about-hero h1 {
+        font-size: 2.3rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .step {
+        flex-direction: column;
+    }
+
+    .step-number {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
+.custom-contact-section {
+    background-color: #f8f9fa;
+}
+
+.custom-container {
+    max-width: 1140px;
+    margin: auto;
+    padding: 0 15px;
+}
+
+.custom-text-center {
+    text-align: center;
+}
+
+.custom-section-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.custom-section-subtitle {
+    font-size: 1rem;
+    color: #777;
+}
+
+.custom-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.custom-col-left,
+.custom-col-right {
+    flex: 1 1 100%;
+}
+
+@media (min-width: 992px) {
+    .custom-col-left,
+    .custom-col-right {
+        flex: 1 1 48%;
+    }
+}
+
+.custom-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.custom-info-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.custom-info-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.custom-info-content h5 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.custom-info-content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.custom-info-content a:hover {
+    text-decoration: underline;
+}
+
+.custom-contact-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+
+</style>
+<section class="about-system">
+    <!-- Hero Section -->
+    <div class="about-hero py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-info-circle text-primary me-2"></i>عن نظام <span class="text-primary">نفّذلي</span>
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        منصة متكاملة لتنفيذ المهام والطلبات بكل كفاءة واحترافية
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#features" class="btn btn-primary btn-lg px-4">
+                            <i class="fas fa-list me-2"></i>مميزات النظام
+                        </a>
+                        <a href="#contact" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="fas fa-envelope me-2"></i>تواصل معنا
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="{{ url_for('static', filename='images/about-hero.svg') }}" alt="نظام نفذلي" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="features-section py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title fw-bold">
+                    <i class="fas fa-star text-primary me-2"></i>مميزات النظام
+                </h2>
+                <p class="section-subtitle text-muted">ما الذي يجعل نفّذلي الخيار الأمثل لتنفيذ مهامك؟</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-primary">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4 class="feature-title">سرعة التنفيذ</h4>
+                        <p class="feature-text">
+                            نظام سريع الاستجابة يحفظ وقتك ويضمن تنفيذ طلباتك في أسرع وقت ممكن
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-success">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 class="feature-title">آمن ومحمي</h4>
+                        <p class="feature-text">
+                            نضمن أمان بياناتك وخصوصيتها بأعلى معايير الحماية والتشفير
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-info">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4 class="feature-title">دعم فني</h4>
+                        <p class="feature-text">
+                            فريق دعم فني متاح على مدار الساعة لمساعدتك في حل أي مشكلة تواجهك
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card h-100">
+                        <div class="feature-icon bg-warning">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4 class="feature-title">متعدد المنصات</h4>
+                        <p class="feature-text">
+                            يمكنك الوصول للنظام من أي جهاز، حاسوب أو هاتف ذكي أو جهاز لوحي
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Info Section -->
+    <div class="system-info py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="info-image">
+                        <img src="{{ url_for('static', filename='images/system-illustration.svg') }}" alt="معلومات النظام" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-4">
+                        <i class="fas fa-cogs text-primary me-2"></i>كيف يعمل نظام نفّذلي؟
+                    </h2>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5>إنشاء الطلب</h5>
+                                <p>قم بتسجيل الدخول وأنشئ طلبك بكل سهولة مع إرفاق كافة التفاصيل والمستندات المطلوبة</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5>مراجعة الطلب</h5>
+                                <p>يقوم فريقنا بمراجعة طلبك والتحقق من كافة التفاصيل والمتطلبات</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5>تنفيذ الطلب</h5>
+                                <p>يتم تنفيذ طلبك بدقة عالية وفقًا للمواصفات والمتطلبات التي حددتها</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h5>تسليم الطلب</h5>
+                                <p>استلم طلبك المنفذ مع ضمان الجودة وخدمة ما بعد التنفيذ إذا لزم الأمر</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="developer-section py-5 bg-light">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 order-lg-2">
+                    <div class="dev-image">
+                        <img src="{{ url_for('static', filename='images/developer.svg') }}" alt="المطور" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <h2 class="fw-bold mb-4">
+                        <i class="fas fa-user-cog text-primary me-2"></i>عن المطور
+                    </h2>
+                    <p class="lead text-muted mb-4">
+تم تطوير نظام "نفّذلي" بواسطة مطوّر بهدف تقديم تجربة استخدام سهلة ومريحة، تُسهم في تسريع وتنظيم تنفيذ الطلبات بكل كفاءة ومرونة.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    
+              <div id="contact" class="custom-contact-section py-5">
+    <div class="custom-container">
+        <div class="custom-text-center mb-5">
+            <h2 class="custom-section-title fw-bold">
+                <i class="fas fa-envelope text-primary me-2"></i>تواصل معنا
+            </h2>
+            <p class="custom-section-subtitle text-muted">لديك استفسار أو تحتاج إلى مساعدة؟ نحن هنا لخدمتك</p>
+        </div>
+
+        <div class="custom-row">
+            <div class="custom-col-left">
+                <div class="custom-contact-info">
+                    <div class="custom-info-item">
+                        <div class="custom-info-icon bg-primary">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="custom-info-content">
+                            <h5>البريد الإلكتروني</h5>
+                            <a href="mailto:mohammadmetawa897@gmail.com">mohammadmetawa897@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="custom-info-item">
+                        <div class="custom-info-icon bg-success">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="custom-info-content">
+                            <h5>واتساب</h5>
+<a href="https://wa.me/201027674505" target="_blank" style="direction: ltr; display: inline-block;">+20 102 767 4505</a>
+                        </div>
+                    </div>
+                    <div class="custom-info-item">
+                        <div class="custom-info-icon bg-info">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="custom-info-content">
+                            <h5>هاتف</h5>
+<a href="tel:+201027674505" style="direction: ltr; display: inline-block;">+20 102 767 4505</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-col-right">
+                <div class="custom-contact-form bg-white p-4 rounded shadow">
+                    <h4 class="mb-4">أرسل رسالتك</h4>
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">اسمك الكريم</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">الموضوع</label>
+                            <input type="text" class="form-control" id="subject">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">الرسالة</label>
+                            <textarea class="form-control" id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-paper-plane me-2"></i>إرسال الرسالة
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   <div class="about-signature text-center py-4" style="background-color: #f9f9f9;">
+    <p class="fw-bold" style="font-size: 1.1rem;">
+        صُنع بكل ❤️ بواسطة <span class="text-primary">xz</span>
+    </p>
+</div>
+
+</section>
+{% endblock %}

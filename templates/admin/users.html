@@ -1,0 +1,189 @@
+{% extends "admin/base.html" %}
+{% block title %}إدارة المستخدمين{% endblock %}
+
+{% block content %}
+<style>
+    .user-container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .user-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .user-header h2 {
+        font-size: 24px;
+        color: #333;
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        margin-bottom: 40px;
+    }
+
+    .users-table thead {
+        background-color: #3f37c9;
+        color: #fff;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .users-table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .delete-btn {
+        background-color: #e63946;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+    .delete-btn:hover {
+        background-color: #c9183a;
+    }
+
+    .unban-btn {
+        background-color: #2a9d8f;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s ease;
+    }
+
+    .unban-btn:hover {
+        background-color: #21867a;
+    }
+
+    @media (max-width: 768px) {
+        .users-table thead {
+            display: none;
+        }
+
+        .users-table,
+        .users-table tbody,
+        .users-table tr,
+        .users-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .users-table tr {
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .users-table td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+        }
+
+        .users-table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 16px;
+            top: 12px;
+            font-weight: bold;
+            color: #555;
+            text-align: left;
+        }
+
+        .delete-btn,
+        .unban-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>
+
+<div class="user-container">
+    <div class="user-header">
+        <h2><i class="fas fa-users"></i> قائمة المستخدمين</h2>
+    </div>
+
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>البريد الإلكتروني</th>
+                <th>تاريخ التسجيل</th>
+                <th>الإجراء</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td data-label="الاسم">{{ user.get('name') or user.get('username') or 'بدون اسم' }}</td>
+                <td data-label="البريد الإلكتروني">{{ user.email }}</td>
+                <td data-label="تاريخ التسجيل">{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else '' }}</td>
+                <td data-label="الإجراء">
+                    <form method="POST" action="{{ url_for('admin_delete_user', user_id=user._id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا المستخدم نهائيًا؟');">
+                        <button type="submit" class="delete-btn">
+                            <i class="fas fa-user-slash"></i> حذف وحظر
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- المحظورين -->
+    <div class="user-header">
+        <h2><i class="fas fa-ban text-danger"></i> قائمة المحظورين</h2>
+    </div>
+
+    {% if banned_users|length == 0 %}
+    <p class="text-muted">لا يوجد مستخدمون محظورون حالياً.</p>
+    {% else %}
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>البريد الإلكتروني</th>
+                <th>تاريخ الحظر</th>
+                <th>الإجراء</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banned in banned_users %}
+            <tr>
+                <td data-label="البريد الإلكتروني">{{ banned.email }}</td>
+                <td data-label="تاريخ الحظر">{{ banned.banned_at.strftime('%Y-%m-%d %H:%M') if banned.banned_at else '-' }}</td>
+                <td data-label="الإجراء">
+                    <form method="POST" action="{{ url_for('admin_unban_user', email=banned.email) }}" onsubmit="return confirm('هل تريد إلغاء الحظر عن هذا المستخدم؟');">
+                        <button type="submit" class="unban-btn">
+                            <i class="fas fa-undo"></i> إلغاء الحظر
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

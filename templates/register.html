@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل مستخدم جديد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/906/906334.png" type="image/png">
+
     <style>
         :root {
             --primary: #4361ee;
@@ -31,11 +34,41 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 1rem;
             color: var(--dark);
             line-height: 1.6;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease both;
+        }
+
+        .header-logo img {
+            height: 90px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.4s ease;
+        }
+
+        .header-logo img:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .header-logo h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(67, 97, 238, 0.15);
+            letter-spacing: -1px;
         }
 
         .register-container {
@@ -44,60 +77,42 @@
             padding: 0.5rem;
         }
 
-        @media (min-width: 576px) {
-            .register-container {
-                max-width: 540px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .register-container {
-                max-width: 720px;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .register-container {
-                max-width: 960px;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .register-container {
-                max-width: 1140px;
-            }
-        }
-
         .register-card {
             border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
             overflow: hidden;
             transition: all 0.3s ease;
             margin: 0 auto;
             width: 100%;
             max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease both 0.2s;
+        }
+
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
 
         .register-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
         }
 
         .card-header {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--white);
-            padding: 1.25rem;
+            padding: 1.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
-        }
-
-        .card-header h4 {
-            font-weight: 700;
-            margin: 0;
-            font-size: 1.5rem;
-            position: relative;
         }
 
         .card-header::before {
@@ -109,92 +124,161 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             transform: rotate(30deg);
+            animation: shine 6s infinite linear;
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            animation: fadeIn 0.8s ease both 0.4s;
+        }
+
+        .card-header h4 {
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.75rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-header h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 50%;
+            transform: translateX(50%);
+            width: 50px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
         }
 
         .card-body {
-            padding: 1.5rem;
+            padding: 2rem;
             background-color: var(--white);
         }
 
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             position: relative;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 600;
             color: var(--dark);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .form-control {
             width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            padding: 0.9rem 1.25rem 0.9rem 3rem;
             border: 2px solid #e0e3e9;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
             transition: all 0.3s ease;
             background-color: var(--light);
             font-family: 'Tajawal', sans-serif;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
             background-color: var(--white);
         }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             border: none;
-            padding: 0.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 10px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
             width: 100%;
             color: white;
             cursor: pointer;
             font-family: 'Tajawal', sans-serif;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
 
         .btn-primary:hover {
             background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .text-center {
             text-align: center;
-            margin-top: 1.5rem;
+            margin-top: 1.75rem;
         }
 
         .text-center p {
             margin-bottom: 0;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .text-center a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .text-center a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         .text-center a:hover {
             color: var(--secondary);
-            text-decoration: underline;
+        }
+
+        .text-center a:hover::after {
+            width: 100%;
+            left: 0;
         }
 
         .error-message {
             color: var(--danger);
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
             display: none;
+            font-weight: 500;
         }
 
         .is-invalid {
@@ -207,102 +291,154 @@
 
         .input-icon {
             position: absolute;
-            right: 1rem;
-            top: 2.5rem;
+            right: 1.25rem;
+            top: 3.1rem;
             color: var(--gray);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
-        /* تحسينات للشاشات الصغيرة */
-        @media (max-width: 480px) {
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                transform: rotate(30deg) translate(-10%, -10%);
+            }
+            100% {
+                transform: rotate(30deg) translate(10%, 10%);
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header-logo img {
+                height: 80px;
+            }
+            
+            .header-logo h1 {
+                font-size: 2.2rem;
+            }
+            
             .card-header h4 {
-                font-size: 1.3rem;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .register-card {
+                border-radius: 15px;
             }
 
-            .card-body {
+            .card-header {
                 padding: 1.25rem;
             }
-
-            .form-control {
-                padding: 0.65rem 1rem 0.65rem 2.3rem;
-                font-size: 0.95rem;
-            }
-
-            .input-icon {
-                top: 2.3rem;
+            
+            .welcome-text {
                 font-size: 1rem;
             }
 
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .header-logo img {
+                height: 70px;
+            }
+            
+            .header-logo h1 {
+                font-size: 2rem;
+            }
+            
             .btn-primary {
-                padding: 0.65rem;
-                font-size: 0.95rem;
+                padding: 0.9rem;
+                font-size: 1rem;
             }
-        }
-
-        /* تحسينات للوضع الأفقي على الأجهزة المحمولة */
-        @media (max-width: 768px) and (orientation: landscape) {
-            .register-container {
-                padding: 0.5rem;
-            }
-
-            .register-card {
-                max-width: 450px;
-            }
-        }
-
-        /* تحسينات للأجهزة اللوحية */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .register-card {
-                max-width: 600px;
-            }
-
-            .card-body {
-                padding: 2rem;
-            }
-        }
-
-        /* تحسينات للشاشات الكبيرة جدًا */
-        @media (min-width: 1600px) {
-            .register-card {
-                max-width: 600px;
-            }
-
-            .card-body {
-                padding: 2.5rem;
-            }
-
+            
             .form-control {
-                padding: 1rem 1.25rem 1rem 3rem;
-                font-size: 1.1rem;
+                padding: 0.8rem 1rem 0.8rem 2.8rem;
             }
-
+            
             .input-icon {
-                font-size: 1.2rem;
-                right: 1.25rem;
                 top: 2.8rem;
-            }
-
-            .btn-primary {
-                padding: 1rem;
+                right: 1rem;
                 font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card-header h4 {
+                font-size: 1.3rem;
+            }
+            
+            .welcome-text {
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
+
 <body>
+    <div class="header-logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906334.png" alt="شعار النظام">
+        <h1>نفذلي</h1>
+    </div>
+    
     <div class="register-container">
         <div class="register-card">
             <div class="card-header">
+                <div class="welcome-text">مرحباً بك في نظام نفذلي، ابدأ رحلتك معنا</div>
                 <h4>تسجيل مستخدم جديد</h4>
             </div>
             <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger"
+                    style="color: var(--danger); text-align: center; margin-bottom: 15px; font-weight: bold;">
+                    {{ error }}
+                </div>
+                {% endif %}
                 <form id="registerForm" method="POST" action="{{ url_for('register') }}">
-                    <div id="formError" style="color: var(--danger); text-align: center; margin-bottom: 15px; font-weight: bold; display: none;"></div>
+                    <div id="formError"
+                        style="color: var(--danger); text-align: center; margin-bottom: 15px; font-weight: bold; display: none;">
+                    </div>
 
                     <div class="form-group">
                         <label for="username" class="form-label">اسم المستخدم</label>
                         <div style="position: relative;">
-                            <input type="text" class="form-control" id="username" name="username" required minlength="3">
+                            <input type="text" class="form-control" id="username" name="username" required
+                                minlength="3" placeholder="أدخل اسم المستخدم">
                             <div class="input-icon">
                                 <i class="fas fa-user"></i>
                             </div>
@@ -313,7 +449,8 @@
                     <div class="form-group">
                         <label for="email" class="form-label">البريد الإلكتروني</label>
                         <div style="position: relative;">
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required
+                                placeholder="أدخل بريدك الإلكتروني">
                             <div class="input-icon">
                                 <i class="fas fa-envelope"></i>
                             </div>
@@ -324,7 +461,8 @@
                     <div class="form-group">
                         <label for="password" class="form-label">كلمة المرور</label>
                         <div style="position: relative;">
-                            <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                            <input type="password" class="form-control" id="password" name="password" required
+                                minlength="6" placeholder="أدخل كلمة المرور">
                             <div class="input-icon">
                                 <i class="fas fa-lock"></i>
                             </div>
@@ -335,7 +473,8 @@
                     <div class="form-group">
                         <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
                         <div style="position: relative;">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                required placeholder="أعد إدخال كلمة المرور">
                             <div class="input-icon">
                                 <i class="fas fa-lock"></i>
                             </div>
@@ -470,4 +609,5 @@
         });
     </script>
 </body>
+
 </html>

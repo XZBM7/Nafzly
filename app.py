@@ -70,6 +70,18 @@ if not os.path.exists(os.path.join(UPLOAD_FOLDER, 'final_tasks')):
     os.makedirs(os.path.join(UPLOAD_FOLDER, 'final_tasks'))
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 
 def allowed_file(filename):
@@ -83,10 +95,17 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None  # متغير لإرسال رسالة الخطأ
+    error = None  
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        
+        
+        banned_user = db.banned_users.find_one({'email': email})
+        if banned_user:
+            error = 'تم حظر هذا الحساب من قبل الإدارة ولا يمكنك تسجيل الدخول.'
+            return render_template('login.html', error=error)
+
         
         user = db.users.find_one({'email': email})
         if user and check_password_hash(user['password'], password):
@@ -98,7 +117,9 @@ def login():
                 return redirect(url_for('home'))
         else:
             error = 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
+            
     return render_template('login.html', error=error)
+
 
 
 
@@ -110,8 +131,11 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
-        
-        if password != confirm_password:
+
+        banned = db.banned_users.find_one({'email': email})
+        if banned:
+            error = 'هذا الحساب محظور ولا يمكنك التسجيل به.'
+        elif password != confirm_password:
             error = 'كلمة المرور غير متطابقة'
         elif db.users.find_one({'email': email}):
             error = 'البريد الإلكتروني موجود بالفعل'
@@ -126,8 +150,9 @@ def register():
             }
             db.users.insert_one(user_data)
             return redirect(url_for('login'))
-    
+
     return render_template('register.html', error=error)
+
 
 
 @app.route('/logout')
@@ -812,6 +837,77 @@ def upload_final_file(task_id):
     flash('تم رفع الملف النهائي بنجاح', 'success')
     return redirect(url_for('admin_completed_tasks'))
 
+@app.route('/admin/users')
+@login_required
+def admin_users():
+    if current_user.role != 'admin':
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('home'))
+
+    users = list(db.users.find({'role': 'user'}).sort('created_at', -1))
+    banned_users = list(db.banned_users.find().sort('banned_at', -1))
+    return render_template('admin/users.html', users=users, banned_users=banned_users)
+
+
+@app.route('/admin/delete_user/<user_id>', methods=['POST'])
+@login_required
+def admin_delete_user(user_id):
+    if current_user.role != 'admin':
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('home'))
+
+    user = db.users.find_one({'_id': ObjectId(user_id), 'role': 'user'})
+    if not user:
+        flash('المستخدم غير موجود أو لا يمكن حذفه', 'danger')
+        return redirect(url_for('admin_users'))
+
+    
+    db.users.delete_one({'_id': ObjectId(user_id)})
+
+    
+    db.banned_users.insert_one({
+        'email': user['email'],
+        'banned_at': datetime.utcnow(),
+        'original_data': user  
+    })
+
+    flash('تم حذف المستخدم وحظره نهائيًا', 'success')
+    return redirect(url_for('admin_users'))
+
+
+@app.route('/admin/unban/<email>', methods=['POST'])
+@login_required
+def admin_unban_user(email):
+    if current_user.role != 'admin':
+        flash('Unauthorized access', 'danger')
+        return redirect(url_for('home'))
+
+    banned_user = db.banned_users.find_one({'email': email})
+    if not banned_user:
+        flash('المستخدم غير موجود في قائمة المحظورين', 'danger')
+        return redirect(url_for('admin_users'))
+
+    
+    original_data = banned_user.get('original_data')
+    if original_data:
+        
+        original_data.pop('_id', None)
+        db.users.insert_one(original_data)
+    else:
+        
+        db.users.insert_one({
+            'email': email,
+            'username': 'مستخدم بدون اسم',
+            'password': '',  
+            'role': 'user',
+            'created_at': datetime.utcnow()
+        })
+
+    
+    db.banned_users.delete_one({'email': email})
+
+    flash(f'تم إلغاء الحظر عن المستخدم: {email}', 'success')
+    return redirect(url_for('admin_users'))
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):

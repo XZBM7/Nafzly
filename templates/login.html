@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/906/906334.png" type="image/png">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
 
         :root {
             --primary: #4361ee;
@@ -19,6 +19,7 @@
             --light: #f8f9fa;
             --gray: #6c757d;
             --dark: #212529;
+            --welcome: #6c63ff;
         }
 
         * {
@@ -32,6 +33,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -39,21 +41,63 @@
             line-height: 1.6;
         }
 
+        .header-logo {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease both;
+        }
+
+        .header-logo img {
+            height: 90px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.4s ease;
+        }
+
+        .header-logo img:hover {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .header-logo h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(67, 97, 238, 0.15);
+            letter-spacing: -1px;
+        }
+
         .login-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             background: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
             overflow: hidden;
             transform-style: preserve-3d;
             perspective: 1000px;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease both 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
 
         .login-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
         }
 
         .login-header {
@@ -74,13 +118,35 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
             transform: rotate(30deg);
+            animation: shine 6s infinite linear;
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            animation: fadeIn 0.8s ease both 0.4s;
         }
 
         .login-header h2 {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             margin-bottom: 5px;
             position: relative;
+            display: inline-block;
+        }
+
+        .login-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 50%;
+            transform: translateX(50%);
+            width: 50px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
         }
 
         .login-body {
@@ -94,50 +160,69 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
+            margin-bottom: 10px;
+            font-weight: 600;
             color: var(--dark);
             font-size: 15px;
         }
 
         .form-control {
             width: 100%;
-            padding: 14px 18px;
+            padding: 15px 20px;
             border: 2px solid #e0e3e9;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: 'Tajawal', sans-serif;
-            font-size: 15px;
+            font-size: 16px;
             transition: all 0.3s ease;
             background-color: var(--light);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.05);
             background-color: var(--white);
         }
 
         .btn {
             display: inline-block;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: var(--white);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: 'Tajawal', sans-serif;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
 
         .btn:hover {
             background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:active {
@@ -147,28 +232,44 @@
         .login-footer {
             text-align: center;
             margin-top: 25px;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--gray);
         }
 
         .login-footer a {
             color: var(--primary);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .login-footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
         }
 
         .login-footer a:hover {
             color: var(--secondary);
-            text-decoration: underline;
         }
 
-        /* تأثيرات التحقق */
+        .login-footer a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
         .error-message {
             color: var(--danger);
-            font-size: 13px;
-            margin-top: 6px;
+            font-size: 14px;
+            margin-top: 8px;
             display: none;
+            font-weight: 500;
         }
 
         .is-invalid {
@@ -181,23 +282,110 @@
 
         .input-icon {
             position: absolute;
-            left: 15px;
-            top: 40px;
+            left: 18px;
+            top: 43px;
             color: var(--gray);
-            font-size: 18px;
+            font-size: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                transform: rotate(30deg) translate(-10%, -10%);
+            }
+            100% {
+                transform: rotate(30deg) translate(10%, 10%);
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header-logo img {
+                height: 80px;
+            }
+            
+            .header-logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .login-header h2 {
+                font-size: 28px;
+            }
         }
 
         @media (max-width: 576px) {
             .login-container {
-                border-radius: 12px;
+                border-radius: 15px;
             }
 
             .login-header {
                 padding: 25px;
             }
+            
+            .welcome-text {
+                font-size: 1rem;
+            }
 
             .login-body {
                 padding: 30px;
+            }
+            
+            .header-logo img {
+                height: 70px;
+            }
+            
+            .header-logo h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 14px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .login-header h2 {
+                font-size: 24px;
+            }
+            
+            .welcome-text {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -205,8 +393,14 @@
 </head>
 
 <body>
+    <div class="header-logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906334.png" alt="شعار النظام">
+        <h1>نفّذلي</h1>
+    </div>
+    
     <div class="login-container">
         <div class="login-header">
+            <div class="welcome-text">أهلاً بعودتك، نتمنى لك يومًا سعيدًا</div>
             <h2>تسجيل الدخول</h2>
         </div>
 
@@ -221,7 +415,7 @@
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>
                     <div style="position: relative;">
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="أدخل بريدك الإلكتروني" required>
                         <div class="input-icon">
                             <i class="fas fa-envelope"></i>
                         </div>
@@ -232,7 +426,7 @@
                 <div class="form-group">
                     <label for="password">كلمة المرور</label>
                     <div style="position: relative;">
-                        <input type="password" class="form-control" id="password" name="password" required
+                        <input type="password" class="form-control" id="password" name="password" placeholder="أدخل كلمة المرور" required
                             minlength="6">
                         <div class="input-icon">
                             <i class="fas fa-lock"></i>
@@ -316,5 +510,4 @@
         });
     </script>
 </body>
-
 </html>

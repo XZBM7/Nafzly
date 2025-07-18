@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}سياسة الخصوصية{% endblock %}
+
+{% block content %}
+<style>
+.privacy-policy-section {
+    background-color: #f9f9fb;
+    line-height: 1.8;
+    font-size: 1rem;
+    color: #333;
+}
+
+.policy-content h4 {
+    color: #3f37c9;
+}
+
+@media (max-width: 768px) {
+    .policy-content {
+        padding: 1.5rem;
+    }
+    .privacy-policy-section h2 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<section class="privacy-policy-section py-5">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold"><i class="fas fa-user-shield text-primary me-2"></i> سياسة الخصوصية</h2>
+      <p class="text-muted">نحن نهتم بخصوصيتك ونوضح هنا كيفية استخدامنا لمعلوماتك</p>
+    </div>
+
+    <div class="policy-content bg-white shadow rounded p-4">
+      <h4 class="fw-bold mb-3">1. المعلومات التي نجمعها</h4>
+      <p>
+        نقوم بجمع المعلومات التي تقدمها لنا مباشرة مثل الاسم، البريد الإلكتروني، ورقم الهاتف عند التسجيل أو التواصل معنا.
+      </p>
+
+      <h4 class="fw-bold mt-4 mb-3">2. كيفية استخدام المعلومات</h4>
+      <p>
+        نستخدم المعلومات لتحسين خدماتنا، والرد على استفساراتك، وإرسال إشعارات مهمة لك تتعلق بحسابك أو طلباتك.
+      </p>
+
+      <h4 class="fw-bold mt-4 mb-3">3. حماية البيانات</h4>
+      <p>
+        نتخذ جميع الإجراءات الأمنية المناسبة لحماية بياناتك من الوصول غير المصرح به أو التعديل أو الحذف.
+      </p>
+
+      <h4 class="fw-bold mt-4 mb-3">4. مشاركة المعلومات</h4>
+      <p>
+        لا نقوم ببيع أو مشاركة بياناتك مع أي طرف ثالث، إلا إذا كان ذلك ضرورياً لتقديم الخدمة أو مطلوباً بموجب القانون.
+      </p>
+
+      <h4 class="fw-bold mt-4 mb-3">5. التعديلات على سياسة الخصوصية</h4>
+      <p>
+        نحتفظ بالحق في تحديث هذه السياسة في أي وقت. سيتم إخطار المستخدمين بالتغييرات الجوهرية عبر البريد الإلكتروني أو إشعار داخل الموقع.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
