@@ -272,6 +272,7 @@ def user_tasks():
     return render_template('/my_tasks.html', tasks=tasks)
 
 
+
 @app.route('/admin_publications')
 @login_required
 def admin_publications():
@@ -280,6 +281,11 @@ def admin_publications():
     message = None
     if not posts:
         message = "لا توجد منشورات حالياً."
+
+    # توليد رابط مباشر لكل ملف PDF
+    for post in posts:
+        if post.get("pdf"):
+            post["pdf_url"] = request.host_url.rstrip('/') + url_for('static', filename=post["pdf"])
 
     return render_template('admin_publications.html', posts=posts, message=message)
 
