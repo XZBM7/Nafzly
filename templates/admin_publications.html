@@ -17,46 +17,60 @@
             height: 150px;
         }
     }
+
+    .no-posts {
+        text-align: center;
+        font-size: 1.2rem;
+        padding: 40px 0;
+        color: #777;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="text-center">المنشورات</h2>
-    </div>
-</div>
+<div class="container my-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-center">المنشورات</h2>
 
-<div class="row">
-    {% for post in posts %}
-    <div class="col-md-6 mb-4">
-        <div class="card h-100 shadow-sm">
-
-            {% if post.pdf %}
-            <div class="p-3">
-                <embed src="{{ url_for('static', filename=post.pdf) }}" type="application/pdf" class="pdf-preview">
+            {% if message %}
+            <div class="alert alert-info text-center mt-3" role="alert">
+                {{ message }}
             </div>
             {% endif %}
-
-            <div class="card-body">
-                <h5 class="card-title">{{ post.title }}</h5>
-                <p class="card-text">{{ post.content }}</p>
-
-                {% if post.pdf %}
-                <div class="d-flex flex-wrap gap-2 mt-3">
-                    <a href="{{ url_for('static', filename=post.pdf) }}" class="btn btn-outline-primary" download>
-                        <i class="fas fa-download me-1"></i> تحميل الملف
-                    </a>
-                    <a href="{{ url_for('static', filename=post.pdf) }}" class="btn btn-outline-success"
-                        target="_blank">
-                        <i class="fas fa-eye me-1"></i> رؤية الملف
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-
         </div>
     </div>
-    {% endfor %}
+
+    {% if posts %}
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if post.pdf %}
+                <div class="p-3">
+                    <embed src="{{ url_for('static', filename=post.pdf) }}" type="application/pdf" class="pdf-preview">
+                </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content }}</p>
+
+                    {% if post.pdf %}
+                    <div class="mt-auto pt-3 d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('static', filename=post.pdf) }}" class="btn btn-outline-primary" download>
+                            <i class="fas fa-download me-1"></i> تحميل الملف
+                        </a>
+                        <a href="{{ url_for('static', filename=post.pdf) }}" class="btn btn-outline-success" target="_blank">
+                            <i class="fas fa-eye me-1"></i> رؤية الملف
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

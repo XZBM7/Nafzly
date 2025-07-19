@@ -275,8 +275,14 @@ def user_tasks():
 @app.route('/admin_publications')
 @login_required
 def admin_publications():
-    posts = db.posts.find().sort('created_at', -1)
-    return render_template('admin_publications.html', posts=posts)
+    posts = list(db.posts.find().sort('created_at', -1))  
+
+    message = None
+    if not posts:
+        message = "لا توجد منشورات حالياً."
+
+    return render_template('admin_publications.html', posts=posts, message=message)
+
 
 
 
@@ -335,12 +341,19 @@ def delete_request(task_id):
 @login_required
 def user_profile():
     if current_user.role != 'user':
-        flash('Unauthorized access', 'danger')
         return redirect(url_for('home'))
 
     user = db.users.find_one({'_id': ObjectId(current_user.id)})
 
+    message = None
+    message_type = None
+
     if request.method == 'POST':
+        if 'delete_account' in request.form:
+            db.users.delete_one({'_id': ObjectId(current_user.id)})
+            logout_user()
+            return render_template('login.html', message="تم حذف الحساب نهائيًا", message_type="success")
+
         new_name = request.form.get('name')
         new_password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
@@ -352,25 +365,24 @@ def user_profile():
 
         if new_password:
             if new_password != confirm_password:
-                flash('Passwords do not match', 'danger')
-                return redirect(url_for('user_profile'))
+                message = "كلمتا المرور غير متطابقتين"
+                message_type = "danger"
             else:
                 hashed_password = generate_password_hash(new_password)
                 update_fields['password'] = hashed_password
 
-        if update_fields:
+        if update_fields and not message:
             db.users.update_one(
                 {'_id': ObjectId(current_user.id)},
                 {'$set': update_fields}
             )
-            flash('تم تحديث الملف الشخصي بنجاح', 'success')
-        else:
-            flash('لا توجد تغييرات', 'info')
+            message = "تم تحديث الملف الشخصي بنجاح"
+            message_type = "success"
+        elif not update_fields and not message:
+            message = "لا توجد تغييرات"
+            message_type = "info"
 
-        return redirect(url_for('user_profile'))
-
-    return render_template('/profile.html', user=user)
-
+    return render_template('profile.html', user=user, message=message, message_type=message_type)
 
 
 @app.route('/admin/dashboard')
